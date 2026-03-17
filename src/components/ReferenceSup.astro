@@ -16,7 +16,7 @@ const { number, href, label } = Astro.props;
 	>
 		{number}
 	</a>
-	<span class="reference-popover-wrap absolute left-full top-1/2 z-50 block w-[26rem] -translate-y-1/2 pl-3">
+	<span class="reference-popover-wrap absolute left-full top-1/2 z-50 block w-[min(26rem,calc(100vw-2rem))] -translate-y-1/2 pl-3">
 		<span class="block rounded-md border border-black/10 bg-white p-3 text-xs normal-case leading-relaxed text-black shadow-lg">
 			<span class="block font-semibold text-black">Reference {number}</span>
 			<span class="mt-1 flex items-start gap-2">
@@ -58,6 +58,18 @@ const { number, href, label } = Astro.props;
 		visibility: hidden;
 		pointer-events: none;
 		transition: opacity 180ms ease;
+	}
+
+	@media (max-width: 1023px) {
+		.reference-popover-wrap {
+			position: fixed;
+			left: 50%;
+			top: auto;
+			bottom: 1rem;
+			transform: translateX(-50%);
+			width: min(26rem, calc(100vw - 2rem));
+			padding-left: 0;
+		}
 	}
 
 	.reference-sup:hover .reference-popover-wrap {

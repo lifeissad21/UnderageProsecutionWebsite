@@ -56,7 +56,7 @@ function pctChange(v2012: number, v2018: number): number {
 	role="figure"
 >
 	<!-- ── Header ────────────────────────────────────────── -->
-	<div class="border-b border-black/8 px-6 py-5 md:px-8">
+	<div class="border-b border-black/8 px-4 py-4 sm:px-6 sm:py-5 md:px-8">
 		<p class="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-black/35">
 			Bureau of Justice Statistics · NSYC
 		</p>
@@ -68,7 +68,7 @@ function pctChange(v2012: number, v2018: number): number {
 		</p>
 
 		<!-- Legend -->
-		<div class="mt-4 flex flex-wrap items-center gap-5 text-[0.75rem] font-semibold text-black/60">
+		<div class="mt-3 flex flex-wrap items-center gap-3 text-[0.72rem] font-semibold text-black/60 sm:mt-4 sm:gap-5 sm:text-[0.75rem]">
 			<span class="flex items-center gap-1.5">
 				<span class="inline-block h-2.5 w-4 rounded-sm bg-[#64748b]"></span>
 				2012
@@ -84,7 +84,7 @@ function pctChange(v2012: number, v2018: number): number {
 	</div>
 
 	<!-- ── Chart body ────────────────────────────────────── -->
-	<div class="px-6 py-6 md:px-8">
+	<div class="px-4 py-5 sm:px-6 sm:py-6 md:px-8">
 		<ul class="space-y-6 list-none p-0 m-0" role="list">
 			{rows.map((row, i) => {
 				const change = pctChange(row.val2012, row.val2018);
@@ -96,13 +96,13 @@ function pctChange(v2012: number, v2018: number): number {
 				return (
 					<li class="bar-row" style={`--i: ${i};`}>
 						<!-- Row header: label + delta badge -->
-						<div class="mb-2 flex items-start justify-between gap-3">
+						<div class="mb-2 flex flex-col items-start gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
 							<div>
 								<span class="text-[0.82rem] font-bold text-black">
 									{row.label}
 									{row.sig && <sup class="ml-0.5 text-[0.65em] text-black/40" title="Statistically significant difference from 2012">†</sup>}
 								</span>
-								<span class="ml-1.5 text-[0.73rem] text-black/40">{row.sub}</span>
+								<span class="mt-0.5 block text-[0.73rem] text-black/40 sm:ml-1.5 sm:mt-0 sm:inline">{row.sub}</span>
 							</div>
 							<span class="shrink-0 rounded-full bg-emerald-50 px-2 py-0.5 text-[0.68rem] font-bold tabular-nums text-emerald-700">
 								{change}%
@@ -156,7 +156,7 @@ function pctChange(v2012: number, v2018: number): number {
 	</div>
 
 	<!-- ── Source footnote ───────────────────────────────── -->
-	<div class="border-t border-black/8 px-6 py-3 md:px-8">
+	<div class="border-t border-black/8 px-4 py-3 sm:px-6 md:px-8">
 		<p class="text-[0.65rem] leading-relaxed text-black/30">
 			Source: Bureau of Justice Statistics, National Survey of Youth in Custody (NSYC), 2012 &amp; 2018 (Table 1).
 			† Difference from 2012 is statistically significant at the 5% significance level.
