@@ -1,6 +1,7 @@
 ---
 import ChapterDivider from '../ChapterDivider.astro';
 import ReferenceSup from '../ReferenceSup.astro';
+import JuvenileJusticeTrendsGraph from '../graphs/JuvenileJusticeTrendsGraph.astro';
 ---
 
 <ChapterDivider
@@ -110,6 +111,14 @@ import ReferenceSup from '../ReferenceSup.astro';
 				label="JJIE: Juvenile Justice Reforms Went Backwards in the '90s"
 			/>.
 		</p>
+
+		<p>
+			This trend view tracks major juvenile-justice indicators indexed to 2019 levels and helps
+			show how policy-era shifts played out across arrests, delinquency case volumes, and
+			detention patterns over time<ReferenceSup number={9} href="https://www.aecf.org/blog/what-juvenile-justice-data-reveal-and-what-the-numbers-cant-tell-us" label="Annie E. Casey Foundation: What juvenile justice data reveal and what the numbers can’t tell us" />.
+		</p>
+
+		<JuvenileJusticeTrendsGraph />
 
 		<p>
 			Department of Justice reporting on transfer policies shows how broad those laws became,

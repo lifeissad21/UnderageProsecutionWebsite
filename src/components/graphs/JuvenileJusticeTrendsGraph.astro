@@ -1,0 +1,247 @@
+---
+import ReferenceSup from '../ReferenceSup.astro';
+
+type Row = {
+	year: number;
+	delinquency: number | null;
+	juvenileArrests: number | null;
+	detainedYouth: number | null;
+};
+
+const data: Row[] = [
+	{ year: 1990, delinquency: 184.403281, juvenileArrests: 282.106868, detainedYouth: null },
+	{ year: 1991, delinquency: 201.597851, juvenileArrests: 296.486794, detainedYouth: null },
+	{ year: 1992, delinquency: 211.821267, juvenileArrests: 297.213211, detainedYouth: null },
+	{ year: 1993, delinquency: 219.555996, juvenileArrests: 313.151582, detainedYouth: null },
+	{ year: 1994, delinquency: 238.758484, juvenileArrests: 347.380259, detainedYouth: null },
+	{ year: 1995, delinquency: 254.482466, juvenileArrests: 350.786857, detainedYouth: null },
+	{ year: 1996, delinquency: 259.785068, juvenileArrests: 374.571678, detainedYouth: null },
+	{ year: 1997, delinquency: 262.429299, juvenileArrests: 368.373581, detainedYouth: 247.9 },
+	{ year: 1998, delinquency: 250.296946, juvenileArrests: 336.558208, detainedYouth: 246.08 },
+	{ year: 1999, delinquency: 241.855204, juvenileArrests: 310.564165, detainedYouth: null },
+	{ year: 2000, delinquency: 239.338235, juvenileArrests: 303.362785, detainedYouth: 255.34 },
+	{ year: 2001, delinquency: 235.94457, juvenileArrests: 293.865126, detainedYouth: null },
+	{ year: 2002, delinquency: 234.063914, juvenileArrests: 299.169829, detainedYouth: 255.27 },
+	{ year: 2003, delinquency: 233.427602, juvenileArrests: 293.953609, detainedYouth: null },
+	{ year: 2004, delinquency: 233.32862, juvenileArrests: 291.544586, detainedYouth: null },
+	{ year: 2005, delinquency: 232.621606, juvenileArrests: 288.460523, detainedYouth: null },
+	{ year: 2006, delinquency: 223.95362, juvenileArrests: 297.050517, detainedYouth: null },
+	{ year: 2007, delinquency: 225.028281, juvenileArrests: 291.865694, detainedYouth: 243.59 },
+	{ year: 2008, delinquency: 222.242647, juvenileArrests: 282.265281, detainedYouth: null },
+	{ year: 2009, delinquency: 203.761312, juvenileArrests: 257.064731, detainedYouth: null },
+	{ year: 2010, delinquency: 186.722285, juvenileArrests: 232.905998, detainedYouth: null },
+	{ year: 2011, delinquency: 169.994344, juvenileArrests: 208.456127, detainedYouth: 187.77 },
+	{ year: 2012, delinquency: 156.122738, juvenileArrests: 186.99755, detainedYouth: null },
+	{ year: 2013, delinquency: 141.14819, juvenileArrests: 154.495725, detainedYouth: 135.87 },
+	{ year: 2014, delinquency: 131.589367, juvenileArrests: 145.137356, detainedYouth: null },
+	{ year: 2015, delinquency: 124.137443, juvenileArrests: 130.647396, detainedYouth: 122.88 },
+	{ year: 2016, delinquency: 116.911765, juvenileArrests: null, detainedYouth: null },
+	{ year: 2017, delinquency: 110.364819, juvenileArrests: 115.095498, detainedYouth: 112.98 },
+	{ year: 2018, delinquency: 103.803733, juvenileArrests: 103.584421, detainedYouth: null },
+	{ year: 2019, delinquency: 100, juvenileArrests: 100, detainedYouth: 100 },
+	{ year: 2020, delinquency: 70.814496, juvenileArrests: 60.857087, detainedYouth: null },
+	{ year: 2021, delinquency: 61.2415158, juvenileArrests: null, detainedYouth: 64.92 },
+	{ year: 2022, delinquency: 77.7007919, juvenileArrests: 68.2564125, detainedYouth: null },
+	{ year: 2023, delinquency: null, juvenileArrests: 75.4134086, detainedYouth: 80.52 },
+];
+
+const WIDTH = 760;
+const HEIGHT = 360;
+const PADDING = { top: 24, right: 28, bottom: 42, left: 54 };
+const INNER_WIDTH = WIDTH - PADDING.left - PADDING.right;
+const INNER_HEIGHT = HEIGHT - PADDING.top - PADDING.bottom;
+
+const years = data.map((d) => d.year);
+const minYear = Math.min(...years);
+const maxYear = Math.max(...years);
+
+const allValues = data.flatMap((d) => [d.delinquency, d.juvenileArrests, d.detainedYouth]).filter((v): v is number => v !== null);
+const minValue = Math.min(...allValues);
+const maxValue = Math.max(...allValues);
+
+const yMin = Math.floor((minValue - 10) / 10) * 10;
+const yMax = Math.ceil((maxValue + 10) / 10) * 10;
+const yStep = 50;
+const yTicks: number[] = [];
+for (let tick = yMin; tick <= yMax; tick += yStep) {
+	yTicks.push(tick);
+}
+
+const xTicks = data.filter((d) => d.year % 5 === 0 || d.year === maxYear).map((d) => d.year);
+
+const x = (year: number): number => PADDING.left + ((year - minYear) / (maxYear - minYear)) * INNER_WIDTH;
+const y = (value: number): number => PADDING.top + ((yMax - value) / (yMax - yMin)) * INNER_HEIGHT;
+
+type MetricKey = 'delinquency' | 'juvenileArrests' | 'detainedYouth';
+
+type Metric = {
+	key: MetricKey;
+	label: string;
+	color: string;
+	reference: number;
+	href: string;
+	popoverLabel: string;
+};
+
+const metrics: Metric[] = [
+	{
+		key: 'juvenileArrests',
+		label: 'Juvenile arrests',
+		color: '#b91c1c',
+		reference: 5,
+		href: 'https://counciloncj.org/who-gets-arrested-in-america-trends-across-four-decades-1980-2024/',
+		popoverLabel: 'Council on Criminal Justice: Who Gets Arrested in America',
+	},
+	{
+		key: 'delinquency',
+		label: 'Delinquency cases',
+		color: '#0f766e',
+		reference: 6,
+		href: 'https://ojjdp.ojp.gov/model-programs-guide/literature-reviews/juvenile-court-system',
+		popoverLabel: 'Juvenile Court Statistics Program delinquency cases',
+	},
+	{
+		key: 'detainedYouth',
+		label: 'Detained youth (recently admitted)',
+		color: '#1d4ed8',
+		reference: 7,
+		href: 'https://www.ojjdp.gov/ojstatbb/cjrp/',
+		popoverLabel: 'Census of Juveniles in Residential Placement detained status count',
+	},
+];
+
+function segmentsFor(key: MetricKey): string[] {
+	const points = data
+		.filter((row) => row[key] !== null)
+		.map((row) => ({ x: x(row.year), y: y(row[key] as number) }));
+
+	if (points.length < 2) return [];
+
+	return [`M ${points.map((pt) => `${pt.x.toFixed(2)} ${pt.y.toFixed(2)}`).join(' L ')}`];
+}
+---
+
+<figure id="juvenile-trends-chart" class="jj-trends-chart my-10 overflow-hidden rounded-lg border border-black/10 bg-white shadow-sm">
+	<div class="border-b border-black/8 px-4 py-4 sm:px-6 sm:py-5 md:px-8">
+		<p class="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-black/35">
+			National Juvenile Justice Indicators
+		</p>
+		<h4 class="mt-1 text-[1.05rem] font-bold leading-tight text-black">
+			Change in Youth Crime Indicators, 1990-2023
+		</h4>
+		<p class="mt-1 text-[0.82rem] leading-relaxed text-black/50">
+			Three national indicators are shown as indexed trend lines over time. Method and framing are based on the Annie E. Casey Foundation chart
+			<ReferenceSup number={9} href="https://www.aecf.org/blog/what-juvenile-justice-data-reveal-and-what-the-numbers-cant-tell-us" label="Annie E. Casey Foundation: What juvenile justice data reveal and what the numbers can’t tell us" popoverEnabled={false} />.
+		</p>
+
+		<div class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-[0.76rem] text-black/70 sm:gap-x-5">
+			{metrics.map((metric) => (
+				<span class="inline-flex items-center gap-2">
+					<span class="h-2.5 w-5 rounded-full" style={`background:${metric.color};`}></span>
+					<span>
+						{metric.label}
+						<ReferenceSup number={metric.reference} href={metric.href} label={metric.popoverLabel} popoverEnabled={false} />
+					</span>
+				</span>
+			))}
+		</div>
+	</div>
+
+	<div class="px-3 py-4 sm:px-4 sm:py-5 md:px-6">
+		<svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-label="Line chart of indexed juvenile arrests, delinquency cases, and detained youth from 1990 to 2023">
+			{yTicks.map((tick) => (
+				<g>
+					<line x1={PADDING.left} x2={WIDTH - PADDING.right} y1={y(tick)} y2={y(tick)} class="grid-line" />
+					<text x={PADDING.left - 8} y={y(tick) + 4} text-anchor="end" class="axis-label">{tick}</text>
+				</g>
+			))}
+
+			{xTicks.map((tick) => (
+				<text x={x(tick)} y={HEIGHT - 12} text-anchor="middle" class="axis-label">{tick}</text>
+			))}
+
+			<line x1={PADDING.left} x2={WIDTH - PADDING.right} y1={HEIGHT - PADDING.bottom} y2={HEIGHT - PADDING.bottom} class="axis-line" />
+			<line x1={PADDING.left} x2={PADDING.left} y1={PADDING.top} y2={HEIGHT - PADDING.bottom} class="axis-line" />
+
+			{metrics.map((metric) => (
+				<g>
+					{segmentsFor(metric.key).map((segment, idx) => (
+						<path
+							d={segment}
+							class="trend-line"
+							style={`--line-color: ${metric.color}; --line-delay: ${(idx + 1) * 140}ms;`}
+							pathLength="1"
+						/>
+					))}
+				</g>
+			))}
+		</svg>
+	</div>
+
+	<div class="border-t border-black/8 px-4 py-3 sm:px-6 md:px-8">
+		<p class="text-[0.68rem] leading-relaxed text-black/35">
+			Juvenile arrests<ReferenceSup number={5} href="https://counciloncj.org/who-gets-arrested-in-america-trends-across-four-decades-1980-2024/" label="Council on Criminal Justice report" popoverEnabled={false} />;
+			delinquency cases<ReferenceSup number={6} href="https://ojjdp.ojp.gov/model-programs-guide/literature-reviews/juvenile-court-system" label="Juvenile Court Statistics Program" popoverEnabled={false} />;
+			detained youth (recently admitted)<ReferenceSup number={7} href="https://www.ojjdp.gov/ojstatbb/cjrp/" label="Census of Juveniles in Residential Placement" popoverEnabled={false} />.
+			Contextual admissions trend: Monthly Youth Detention Survey<ReferenceSup number={8} href="https://www.aecf.org/work/juvenile-justice/monthly-youth-detention-survey" label="Monthly Youth Detention Survey" popoverEnabled={false} />.
+		</p>
+	</div>
+</figure>
+
+<style>
+	.jj-trends-chart svg {
+		height: auto;
+		width: 100%;
+	}
+
+	.grid-line {
+		stroke: rgb(15 23 42 / 0.12);
+		stroke-width: 1;
+	}
+
+	.axis-line {
+		stroke: rgb(15 23 42 / 0.28);
+		stroke-width: 1.1;
+	}
+
+	.axis-label {
+		fill: rgb(15 23 42 / 0.55);
+		font-size: 10px;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.trend-line {
+		fill: none;
+		stroke: var(--line-color);
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-width: 4;
+		stroke-dasharray: 1;
+		stroke-dashoffset: 1;
+		opacity: 0.95;
+		transition: stroke-dashoffset 1200ms cubic-bezier(0.25, 1, 0.5, 1);
+		transition-delay: var(--line-delay, 0ms);
+	}
+
+	.jj-trends-chart.in-view .trend-line {
+		stroke-dashoffset: 0;
+	}
+</style>
+
+<script>
+	(() => {
+		const chart = document.getElementById('juvenile-trends-chart');
+		if (!chart) return;
+
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (!entry.isIntersecting) return;
+				chart.classList.add('in-view');
+				observer.disconnect();
+			},
+			{ threshold: 0.2 },
+		);
+
+		observer.observe(chart);
+	})();
+</script>
