@@ -342,10 +342,46 @@ export function getReference(id: number): APAReference | undefined {
   return references.find((ref) => ref.id === id);
 }
 
+function parsePersonalAuthorLastNames(author: string): string[] {
+  // Matches patterns like "Lastname, A." and "Lastname, A. B.".
+  // If no personal-name pattern is found, caller should treat the full string as an organization.
+  const matches = Array.from(
+    author.matchAll(/([A-Za-z][A-Za-z'\- ]*[A-Za-z])\s*,\s*[A-Z](?:\.|\b)/g),
+    (m) => m[1].trim(),
+  );
+
+  const unique: string[] = [];
+  for (const lastName of matches) {
+    if (!unique.includes(lastName)) {
+      unique.push(lastName);
+    }
+  }
+
+  return unique;
+}
+
+function formatInTextAuthor(author: string): string {
+  const lastNames = parsePersonalAuthorLastNames(author);
+
+  if (lastNames.length === 1) {
+    return lastNames[0];
+  }
+
+  if (lastNames.length === 2) {
+    return `${lastNames[0]} & ${lastNames[1]}`;
+  }
+
+  if (lastNames.length >= 3) {
+    return `${lastNames[0]} et al.`;
+  }
+
+  return author.trim();
+}
+
 export function getInTextCitation(id: number): string {
   const ref = getReference(id);
   if (!ref) return "(Unknown, Unknown)";
-  return `(${ref.author}, ${ref.year})`;
+  return `(${formatInTextAuthor(ref.author)}, ${ref.year})`;
 }
 
 export function generateAPAReferences(): string {

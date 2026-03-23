@@ -1,32 +1,13 @@
 ---
-import { references } from '../data/references';
-
-// Sort references alphabetically by author, then by year
-const sortedReferences = [...references].sort((a, b) => {
-	const authorA = a.author.toLowerCase();
-	const authorB = b.author.toLowerCase();
-	if (authorA !== authorB) {
-		return authorA.localeCompare(authorB);
-	}
-	return a.year.localeCompare(b.year);
-});
+import { formattedReferences } from '../data/formattedReferences';
 ---
 
 <section id="references" class="mx-auto max-w-2xl px-6 py-24">
 	<h2 class="text-2xl font-bold text-black">References</h2>
 	<ol class="mt-3 list-decimal space-y-4 pl-6 text-base leading-relaxed text-black">
-		{sortedReferences.map((ref) => (
-			<li id={`reference-${ref.id}`} class="reference-item">
-				<div class="reference-entry mb-1">
-					{ref.author} ({ref.year}). <em>{ref.title}</em>. Retrieved from <a
-						href={ref.url}
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-[#780000] underline hover:text-[#c1121f]"
-					>
-						{ref.url}
-					</a>
-				</div>
+		{formattedReferences.map((citation, index) => (
+			<li id={`reference-${index + 1}`} class="reference-item">
+				<div class="reference-entry mb-1" set:html={citation}></div>
 			</li>
 		))}
 	</ol>
@@ -56,19 +37,28 @@ const sortedReferences = [...references].sort((a, b) => {
 
 	.reference-entry {
 		--hanging-indent: 2rem;
-		padding: 0.85rem 1.1rem 0.85rem calc(1.1rem + var(--hanging-indent));
+		display: block;
+		padding-left: var(--hanging-indent);
 		text-indent: calc(-1 * var(--hanging-indent));
 		border-radius: 0.375rem;
 		background-color: transparent;
-	}
-
-	.reference-entry a {
 		white-space: normal;
 		overflow-wrap: anywhere;
 		word-break: break-word;
 	}
 
-	em {
+	.reference-entry :global(a) {
+		color: #780000;
+		text-decoration: underline;
+		overflow-wrap: anywhere;
+		word-break: break-word;
+	}
+
+	.reference-entry :global(a:hover) {
+		color: #c1121f;
+	}
+
+	.reference-entry :global(i) {
 		font-style: italic;
 	}
 
