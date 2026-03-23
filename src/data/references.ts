@@ -415,6 +415,14 @@ export const references: APAReference[] = [
     fullCitation: "Feierman et al. (2023). Pretrial detention and youth justice outcomes. Retrieved from https://pmc.ncbi.nlm.nih.gov/articles/PMC9993616/",
     url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9993616/",
   },
+  {
+    id: 55,
+    author: "Annie E. Casey Foundation",
+    year: 2015,
+    title: "Maltreatment of Youth in U.S. Juvenile Corrections Facilities",
+    fullCitation: "Annie E. Casey Foundation. (2015). Maltreatment of youth in U.S. juvenile corrections facilities. Retrieved from https://assets.aecf.org/m/resourcedoc/aecf-maltreatmentyouthuscorrections-2015.pdf",
+    url: "https://assets.aecf.org/m/resourcedoc/aecf-maltreatmentyouthuscorrections-2015.pdf",
+  },
 ];
 
 /**
