@@ -1,4 +1,6 @@
 ---
+import ReferenceSup from '../ReferenceSup.astro';
+
 // Data: Bureau of Justice Statistics, National Survey of Youth in Custody (NSYC), 2012 & 2018
 const MAX = 11; // percentage scale ceiling - slightly above 9.5% for breathing room
 
@@ -154,7 +156,8 @@ function pctChange(v2012: number, v2018: number): number {
 	<!-- Source footnote -->
 	<div class="border-t border-black/8 px-4 py-3 sm:px-6 md:px-8">
 		<p class="text-[0.65rem] leading-relaxed text-black/30">
-			Source: Bureau of Justice Statistics, National Survey of Youth in Custody (NSYC), 2012 and 2018 (Table 1).
+			Source: Bureau of Justice Statistics, National Survey of Youth in Custody (NSYC), 2012 and 2018 (Table 1)
+			<ReferenceSup refId={35} popoverEnabled={false} />.
 			Difference from 2012 is statistically significant at the 5% significance level.
 			* 2012 figures may not sum to subtotals due to rounding.
 		</p>

@@ -1,13 +1,9 @@
 ---
 import { Picture } from 'astro:assets';
-import ReferenceSup from './ReferenceSup.astro';
 
 type MediaSlot = {
 	src: string;
 	alt: string;
-	sourceTitle: string;
-	sourceHref?: string;
-	sourceRefNumber?: number;
 };
 
 type HeroFrame = {
@@ -24,9 +20,6 @@ const heroFrames: HeroFrame[] = [
 			{
 				src: heroPath('opening-vox.jpg'),
 				alt: 'Teen in juvenile detention setting',
-				sourceTitle: 'How charging teenagers as adults works',
-				sourceHref: 'https://www.vox.com/2014/5/22/5740168/charging-teenagers-as-adults-direct-file-safety-recidivism-juvenile-justice',
-				sourceRefNumber: 1,
 			},
 		],
 	},
@@ -35,12 +28,10 @@ const heroFrames: HeroFrame[] = [
 			{
 				src: heroPath('too-young-latimes.jpg'),
 				alt: 'Youth in California justice facility',
-				sourceTitle: 'California is closing state youth prisons',
 			},
 			{
 				src: heroPath('too-young-cdf.jpg'),
 				alt: 'Youth justice advocacy portrait',
-				sourceTitle: "The State of America's Children: Youth Justice",
 			},
 		],
 	},
@@ -49,7 +40,6 @@ const heroFrames: HeroFrame[] = [
 			{
 				src: heroPath('sentenced-gpb.jpg'),
 				alt: 'Teen in correctional setting',
-				sourceTitle: 'Can Kids Be Scared Straight?',
 			},
 		],
 	},
@@ -58,7 +48,6 @@ const heroFrames: HeroFrame[] = [
 			{
 				src: heroPath('juvenile-justice-cincinnati.jpg'),
 				alt: 'Ohio youth detention center still image',
-				sourceTitle: "Ohio's youth prison detention centers struggle with injuries, neglect",
 			},
 		],
 	},
@@ -89,15 +78,6 @@ const heroFrames: HeroFrame[] = [
 									<div class="hero-media-slot hero-media-overlap-slot">
 										<figure class="hero-media-card">
 											<Picture src={slot.src} formats={['webp']} alt={slot.alt} class="h-full w-full object-cover" width={1600} height={1000} loading="eager" />
-											<figcaption class="hero-media-source">
-												Source title: {slot.sourceTitle}
-												{slot.sourceRefNumber && slot.sourceHref && (
-													<ReferenceSup
-														refId={slot.sourceRefNumber}
-														popoverEnabled={false}
-													/>
-												)}
-											</figcaption>
 										</figure>
 									</div>
 								))}
@@ -108,15 +88,6 @@ const heroFrames: HeroFrame[] = [
 									<div class="hero-media-slot">
 										<figure class="hero-media-card">
 											<Picture src={slot.src} formats={['webp']} alt={slot.alt} class="h-full w-full object-cover" width={1600} height={1000} loading="eager" />
-											<figcaption class="hero-media-source">
-												Source title: {slot.sourceTitle}
-												{slot.sourceRefNumber && slot.sourceHref && (
-													<ReferenceSup
-														refId={slot.sourceRefNumber}
-														popoverEnabled={false}
-													/>
-												)}
-											</figcaption>
 										</figure>
 									</div>
 								))}
@@ -208,17 +179,6 @@ const heroFrames: HeroFrame[] = [
 		border: 0;
 	}
 
-	.hero-media-source {
-		margin: 0;
-		padding: 0.42rem 0.55rem;
-		font-size: 0.73rem;
-		line-height: 1.4;
-		letter-spacing: 0.02em;
-		color: rgb(255 255 255 / 0.88);
-		background: rgb(0 0 0 / 0.62);
-		border: 0;
-	}
-
 	.hero-media-overlap {
 		position: relative;
 		height: 28.8rem;
@@ -238,23 +198,6 @@ const heroFrames: HeroFrame[] = [
 	.hero-media-overlap-slot .hero-media-card {
 		position: relative;
 		display: block;
-	}
-
-	.hero-media-overlap-slot .hero-media-source {
-		position: absolute;
-		left: 0.45rem;
-		right: 0.45rem;
-		bottom: 0.45rem;
-		z-index: 3;
-		font-size: 0.68rem;
-		line-height: 1.3;
-		background: rgb(0 0 0 / 0.72);
-		backdrop-filter: blur(1.5px);
-	}
-
-	.hero-media-overlap-slot:nth-child(1) .hero-media-source {
-		top: 0.45rem;
-		bottom: auto;
 	}
 
 	.hero-media-overlap-slot:nth-child(1) {

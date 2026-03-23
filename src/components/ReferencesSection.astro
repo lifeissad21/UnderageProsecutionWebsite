@@ -8,7 +8,7 @@ const sortedReferences = [...references].sort((a, b) => {
 	if (authorA !== authorB) {
 		return authorA.localeCompare(authorB);
 	}
-	return a.year - b.year;
+	return a.year.localeCompare(b.year);
 });
 ---
 
@@ -18,7 +18,7 @@ const sortedReferences = [...references].sort((a, b) => {
 		{sortedReferences.map((ref) => (
 			<li id={`reference-${ref.id}`} class="reference-item">
 				<div class="reference-entry mb-1">
-					<strong>{ref.author}</strong> ({ref.year}). <em>{ref.title}</em>. Retrieved from <a
+					{ref.author} ({ref.year}). <em>{ref.title}</em>. Retrieved from <a
 						href={ref.url}
 						target="_blank"
 						rel="noopener noreferrer"
@@ -60,6 +60,12 @@ const sortedReferences = [...references].sort((a, b) => {
 		text-indent: calc(-1 * var(--hanging-indent));
 		border-radius: 0.375rem;
 		background-color: transparent;
+	}
+
+	.reference-entry a {
+		white-space: normal;
+		overflow-wrap: anywhere;
+		word-break: break-word;
 	}
 
 	em {
