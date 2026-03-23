@@ -93,10 +93,8 @@ import { formattedReferences } from '../data/formattedReferences';
 <script>
 	(() => {
 		const RETURN_Y_KEY = 'referenceReturnY';
-		let isInReferencesSection = false;
 		const refItems = Array.from(document.querySelectorAll<HTMLElement>('#references .reference-item'));
 		const returnButton = document.querySelector<HTMLButtonElement>('[data-return-reading]');
-		const referencesSection = document.getElementById('references');
 
 		const highlightFromHash = () => {
 			const hash = window.location.hash;
@@ -117,8 +115,7 @@ import { formattedReferences } from '../data/formattedReferences';
 		const toggleReturnButton = () => {
 			if (!returnButton) return;
 			const hasStoredPosition = sessionStorage.getItem(RETURN_Y_KEY) !== null;
-			const isAtPageBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
-			const shouldShow = hasStoredPosition && (isInReferencesSection || isAtPageBottom);
+			const shouldShow = hasStoredPosition;
 			returnButton.classList.toggle('hidden', !shouldShow);
 			returnButton.classList.toggle('flex', shouldShow);
 		};
@@ -147,17 +144,6 @@ import { formattedReferences } from '../data/formattedReferences';
 		window.addEventListener('scroll', () => {
 			toggleReturnButton();
 		}, { passive: true });
-
-		if (referencesSection && 'IntersectionObserver' in window) {
-			const sectionObserver = new IntersectionObserver(
-				([entry]) => {
-					isInReferencesSection = entry.isIntersecting;
-					toggleReturnButton();
-				},
-				{ threshold: 0.15 },
-			);
-			sectionObserver.observe(referencesSection);
-		}
 
 		window.addEventListener('load', () => {
 			highlightFromHash();
