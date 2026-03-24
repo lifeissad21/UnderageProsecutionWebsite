@@ -1,13 +1,45 @@
 ---
 import { formattedReferences } from '../data/formattedReferences';
+import { references } from '../data/references';
+
+type ReferenceListItem = {
+	id: number;
+	author: string;
+	citation: string;
+};
+
+const extractSortKey = (author: string): string => {
+	const trimmed = author.trim();
+	if (!trimmed) return '';
+
+	// Personal names are stored as "Lastname, Initials"; organizations have no comma pattern.
+	const commaIndex = trimmed.indexOf(',');
+	if (commaIndex > 0) {
+		return trimmed.slice(0, commaIndex).trim().toLowerCase();
+	}
+
+	return trimmed.toLowerCase();
+};
+
+const referenceItems: ReferenceListItem[] = formattedReferences.map((citation, index) => ({
+	id: index + 1,
+	author: references[index]?.author ?? '',
+	citation,
+}));
+
+const sortedReferenceItems = [...referenceItems].sort((a, b) => {
+	const authorCompare = extractSortKey(a.author).localeCompare(extractSortKey(b.author));
+	if (authorCompare !== 0) return authorCompare;
+	return a.id - b.id;
+});
 ---
 
 <section id="references" class="mx-auto max-w-2xl px-6 py-24">
 	<h2 class="text-2xl font-bold text-black">References</h2>
 	<ol class="mt-3 list-decimal space-y-4 pl-6 text-base leading-relaxed text-black">
-		{formattedReferences.map((citation, index) => (
-			<li id={`reference-${index + 1}`} class="reference-item">
-				<div class="reference-entry mb-1" set:html={citation}></div>
+		{sortedReferenceItems.map((item) => (
+			<li id={`reference-${item.id}`} class="reference-item">
+				<div class="reference-entry mb-1" set:html={item.citation}></div>
 			</li>
 		))}
 	</ol>
