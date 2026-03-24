@@ -64,7 +64,15 @@ const heroFrames: HeroFrame[] = [
 				<h1 id="hero-main-title" class="hero-main-title mt-6 text-5xl font-black uppercase leading-[0.95] text-[#c1121f] sm:text-6xl md:text-7xl lg:text-8xl">
 					Underage Prosecution
 				</h1>
-				<p id="hero-subtext" class="hero-subtext mt-8 max-w-2xl text-base leading-8 text-white/70 md:text-lg">
+				<div id="hero-byline" class="hero-byline is-hidden">
+					<p class="mt-4 text-sm font-medium tracking-wide text-white/85 md:text-base">
+						By Minh Nguyen, George Mathew, Noah Kim, and Brian Zhou
+					</p>
+					<p class="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-white/65 md:text-sm">
+						GSMST
+					</p>
+				</div>
+				<p id="hero-subtext" class="hero-subtext is-hidden mt-8 max-w-2xl text-base leading-8 text-white/70 md:text-lg">
 					{restingSubtext}
 				</p>
 			</div>
@@ -130,6 +138,20 @@ const heroFrames: HeroFrame[] = [
 		transition:
 			opacity 360ms ease,
 			transform 360ms ease;
+	}
+
+	.hero-byline {
+		opacity: 1;
+		transform: translateY(0);
+		transition:
+			opacity 300ms ease,
+			transform 300ms ease;
+	}
+
+	.hero-byline.is-hidden {
+		opacity: 0;
+		transform: translateY(10px);
+		pointer-events: none;
 	}
 
 	.hero-subtext.is-hidden {
@@ -289,11 +311,12 @@ const heroFrames: HeroFrame[] = [
 		if (!root) return;
 
 		const titleEl = root.querySelector('#hero-main-title');
+		const bylineEl = root.querySelector('#hero-byline');
 		const subtextEl = root.querySelector('#hero-subtext');
 		const replayButton = root.querySelector('#hero-replay');
 		const frames = Array.from(root.querySelectorAll('.hero-frame'));
 
-		if (!(titleEl instanceof HTMLElement) || !(subtextEl instanceof HTMLElement) || !(replayButton instanceof HTMLButtonElement)) {
+		if (!(titleEl instanceof HTMLElement) || !(bylineEl instanceof HTMLElement) || !(subtextEl instanceof HTMLElement) || !(replayButton instanceof HTMLButtonElement)) {
 			return;
 		}
 
@@ -307,7 +330,6 @@ const heroFrames: HeroFrame[] = [
 		const introDelayMs = 2100;
 		const phraseDelayMs = 2600;
 		let isPlaying = false;
-		let isPaused = false;
 		let animationAborted = false;
 		let timeoutIds: number[] = [];
 
@@ -336,6 +358,7 @@ const heroFrames: HeroFrame[] = [
 
 		const setRestingHero = () => {
 			titleEl.textContent = 'Underage Prosecution';
+			bylineEl.classList.remove('is-hidden');
 			subtextEl.classList.remove('is-hidden');
 			setFrame(0);
 		};
@@ -344,9 +367,9 @@ const heroFrames: HeroFrame[] = [
 			if (isPlaying) return;
 			isPlaying = true;
 			animationAborted = false;
-			isPaused = false;
 
 			replayButton.hidden = true;
+			bylineEl.classList.add('is-hidden');
 			subtextEl.classList.add('is-hidden');
 			setFrame(0);
 			await sleep(introDelayMs);
